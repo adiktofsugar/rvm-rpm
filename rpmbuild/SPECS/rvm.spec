@@ -1,9 +1,10 @@
 Name: rvm
 Version: 0.1
 Release: 1
-Requires: libyaml-devel
-Summary: Required
-License: Required
+BuildRequires: libyaml-devel libffi-devel autoconf automake libtool bison
+Requires: libyaml-devel libffi-devel autoconf automake libtool bison
+Summary: Rvm and ruby
+License: Open
 
 %description
 Rvm with ruby, gem, and bundler, packaged as an rpm. System level install.
@@ -17,19 +18,24 @@ sudo ./install --auto-dotfiles
 
 sudo bash -c 'echo "" > /usr/local/rvm/gemsets/default.gems'
 sudo bash -c 'echo "" > /usr/local/rvm/gemsets/global.gems'
+
 sudo bash -c 'echo "
 rvm_archives_path=/usr/local/rvm/archives
 rvm_autolibs_flag=read-fail
 " > /etc/rvmrc'
+
 sudo cp -rf $RPM_SOURCE_DIR/rvm/archives/* /usr/local/rvm/archives/
 sudo chgrp -R rvm /usr/local/rvm
 sudo chmod -R g+wxr /usr/local/rvm
 
-source /usr/local/rvm/scripts/rvm
+sudo /usr/local/rvm/bin/rvm install 2.1.3
 
-rvm install 2.1.3
-rvm use --default 2.1.3
-rvm @global do gem install /usr/local/rvm/archives/bundler-1.7.3.gem
+sudo bash -c 'echo "
+current=ruby-2.1.3
+default=ruby-2.1.3
+" > /usr/local/rvm/config/alias'
+
+sudo /usr/local/rvm/bin/rvm 2.1.3@global do gem install /usr/local/rvm/archives/bundler-1.7.3.gem
 
 
 %install
@@ -46,9 +52,9 @@ sudo chgrp -R rvm $RPM_BUILD_ROOT/usr/local/rvm
 sudo chmod -R g+wxr $RPM_BUILD_ROOT/usr/local/rvm
 
 %clean
-sudo rm -rf /usr/local/rvm
-sudo rm /etc/rvmrc
-sudo rm /etc/profile.d/rvm.sh
+#sudo rm -rf /usr/local/rvm
+#sudo rm /etc/rvmrc
+#sudo rm /etc/profile.d/rvm.sh
 
 %files
 /usr/local/rvm
