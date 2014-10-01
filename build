@@ -1,0 +1,5 @@
+#!/bin/bash
+
+current_dir=`cd $(dirname ${BASH_SOURCE[0]}) && pwd`
+echo $current_dir
+rpmbuild -bb --define "_topdir $current_dir/rpmbuild" $current_dir/rpmbuild/SPECS/rvm.spec
